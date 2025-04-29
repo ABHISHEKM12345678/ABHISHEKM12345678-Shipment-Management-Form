@@ -1,4 +1,3 @@
-<img width="960" alt="Login2Xplore" src="https://github.com/user-attachments/assets/4141c3a0-e598-4e75-9b6d-af8896359163" />
 # 🚚 Shipment Management Form
 
 A web-based Shipment Management Form created using **HTML**, **JavaScript**, and **JSONPowerDB** (JPDB) for managing shipment records. Developed in **NetBeans**.
