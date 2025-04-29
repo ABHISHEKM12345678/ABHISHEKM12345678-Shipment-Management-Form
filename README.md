@@ -1,172 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Shipment Management Form</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        <script src="https://login2explore.com/jpdb/resources/js/0.0.3/jpdb-commons.js"></script>
-        <script src="js/index.js" defer></script>
-    </head>
-    <body>
-        <div class="container">
-            <h2>Shipment Management Form</h2>
-            <form id="shipmentForm">
-                <div class="form-group">
-                    <label>Shipment No:</label>
-                    <input type="text" id="shipmentNo" name="shipmentNo" class="form-control" onchange="getShipment()" autofocus>
-                </div>
+<img width="960" alt="Login2Xplore" src="https://github.com/user-attachments/assets/4141c3a0-e598-4e75-9b6d-af8896359163" />
+# 🚚 Shipment Management Form
 
-                <div class="form-group">
-                    <label>Description:</label>
-                    <input type="text" id="description" name="description" class="form-control">
-                </div>
+A web-based Shipment Management Form created using **HTML**, **JavaScript**, and **JSONPowerDB** (JPDB) for managing shipment records. Developed in **NetBeans**.
 
-                <div class="form-group">
-                    <label>Source:</label>
-                    <input type="text" id="source" name="source" class="form-control">
-                </div>
+## 📌 Objective
 
-                <div class="form-group">
-                    <label>Destination:</label>
-                    <input type="text" id="destination" name="destination" class="form-control">
-                </div>
+To store and manage shipment details in the `SHIPMENT` table of the `DELIVERY-DB` database using JSONPowerDB REST APIs.
 
-                <div class="form-group">
-                    <label>Shipping Date:</label>
-                    <input type="date" id="shippingDate" name="shippingDate" class="form-control">
-                </div>
+---
 
-                <div class="form-group">
-                    <label>Expected Delivery Date:</label>
-                    <input type="date" id="expectedDeliveryDate" name="expectedDeliveryDate" class="form-control">
-                </div>
+## 🧾 Input Fields
 
-                <div class="form-group text-center">
-                    <button type="button" id="save" class="btn btn-lg btn-primary" disabled onclick="saveData()">Save</button>
-                    <button type="button" id="update" class="btn btn-lg btn-primary" disabled onclick="updateData()">Update</button>
-                    <button type="button" id="reset" class="btn btn-lg btn-primary" disabled onclick="resetForm()">Reset</button>
-                </div>
-            </form>
-        </div>
+- **Shipment No.** (Primary Key)
+- **Description**
+- **Source**
+- **Destination**
+- **Shipping Date**
+- **Expected Delivery Date**
 
-        <script>
-            var baseUrl = "http://api.login2explore.com:5577";
-            var dbName = "DeliveryDB";
-            var rel = "SHIPMENT-TABLE";
-            var userCreds = "90934718|-31949208594406555|90956260";
+---
 
-            function validateAndGetFormData() {
-                var shipmentNo = $("#shipmentNo").val();
-                var description = $("#description").val();
-                var source = $("#source").val();
-                var destination = $("#destination").val();
-                var shippingDate = $("#shippingDate").val();
-                var expectedDeliveryDate = $("#expectedDeliveryDate").val();
+## 🧠 Features & Logic
 
-                if (shipmentNo === "" || description === "" || source === "" || destination === "" || shippingDate === "" || expectedDeliveryDate === "") {
-                    alert("All fields must be filled.");
-                    return "";
-                }
+- On **page load**:
+  - All fields except **Shipment No.** are disabled.
+  - Buttons: [Save], [Update], and [Reset] are disabled.
+  - Cursor is focused on **Shipment No.**
 
-                var jsonStrObj = {
-                    shipmentNo: shipmentNo,
-                    description: description,
-                    source: source,
-                    destination: destination,
-                    shippingDate: shippingDate,
-                    expectedDeliveryDate: expectedDeliveryDate
-                };
+- On **entering Shipment No.**:
+  - If Shipment No. **does not exist** in DB:
+    - Enable all fields, [Save] and [Reset] buttons.
+    - <img width="960" alt="Login2Xplore1" src="https://github.com/user-attachments/assets/6d1ae8a4-8b05-4045-a2a7-3aae367a2ce5" />
 
-                return JSON.stringify(jsonStrObj);
-            }
+  - If Shipment No. **exists**:
+    - Fetch and populate all fields.
+    - Disable **Shipment No.** field.
+    - Enable [Update] and [Reset] buttons.
+    - <img width="960" alt="Login2Xplore" src="https://github.com/user-attachments/assets/f4f5d09b-8dd9-46e3-be2f-70ee041eed93" />
 
-            function saveData() {
-                var jsonStr = validateAndGetFormData();
-                if (jsonStr === "")
-                    return;
 
-                var putReqStr = createPUTRequest(userCreds, jsonStr, dbName, rel);
-                jQuery.ajaxSetup({async: false});
-                var resJsonObj = executeCommandAtGivenBaseUrl(putReqStr, baseUrl, "/api/iml");
-                jQuery.ajaxSetup({async: true});
-                resetForm();
-                $("#shipmentNo").focus();
-            }
+- **Validation**:
+  - No field can be empty before saving or updating.
+  - <img width="960" alt="Login2Xplore3" src="https://github.com/user-attachments/assets/54e74e9a-0cf6-4258-897b-1149c424d5e6" />
 
-            function resetForm() {
-                $("#shipmentNo").val("");
-                $("#description").val("");
-                $("#source").val("");
-                $("#destination").val("");
-                $("#shippingDate").val("");
-                $("#expectedDeliveryDate").val("");
 
-                $("#save").prop("disabled", true);
-                $("#update").prop("disabled", true);
-                $("#reset").prop("disabled", true);
+- On clicking
+  - **Save**: Adds the record to the DB.
+  - **Update**: Updates the existing record.
+  - **Reset**: Clears form and resets to default state.
 
-                $("#shipmentNo").focus();
-            }
+## 🛠️ Technologies Used
 
-            function updateData() {
-                var jsonStr = validateAndGetFormData();
-                if (jsonStr === "")
-                    return;
+- **Frontend**: HTML5, CSS, JavaScript (Vanilla JS)
+- **Database**: JSONPowerDB
+- <img width="960" alt="Login2Xplore2" src="https://github.com/user-attachments/assets/4871766e-28ab-4431-995a-357d1370a47f" />
+- **IDE**: NetBeans
+- <img width="960" alt="Login2Xplore4" src="https://github.com/user-attachments/assets/769fe8ea-9c40-4502-8a27-bbd2929b5d94" />
 
-                var updateRequest = createUPDATERecordRequest(userCreds, jsonStr, dbName, rel, localStorage.getItem("recno"));
-                jQuery.ajaxSetup({async: false});
-                var resJsonObj = executeCommandAtGivenBaseUrl(updateRequest, baseUrl, "/api/iml");
-                jQuery.ajaxSetup({async: true});
 
-                resetForm();
-            }
-
-            function getShipment() {
-                var shipmentNoJsonObj = getShipmentNoAsJsonObj();
-                var getRequest = createGET_BY_KEYRequest(userCreds, dbName, rel, shipmentNoJsonObj);
-
-                jQuery.ajaxSetup({async: false});
-                var resJsonObj = executeCommandAtGivenBaseUrl(getRequest, baseUrl, "/api/irl");
-                jQuery.ajaxSetup({async: true});
-
-                if (resJsonObj.status === 400) {
-                    $("#save").prop("disabled", false);
-                    $("#reset").prop("disabled", false);
-                    $("#description").focus();
-                } else if (resJsonObj.status === 200) {
-                    $("#shipmentNo").prop("disabled", true);
-                    fillData(resJsonObj);
-                    $("#update").prop("disabled", false);
-                    $("#reset").prop("disabled", false);
-                    $("#description").focus();
-                }
-            }
-
-            function getShipmentNoAsJsonObj() {
-                var shipmentNo = $('#shipmentNo').val();
-                var jsonStr = {
-                    shipmentNo: shipmentNo
-                };
-                return JSON.stringify(jsonStr);
-            }
-
-            function fillData(jsonObj) {
-                saveRecNo2ls(jsonObj);
-                var record = JSON.parse(jsonObj.data).record;
-                $("#description").val(record.description);
-                $("#source").val(record.source);
-                $("#destination").val(record.destination);
-                $("#shippingDate").val(record.shippingDate);
-                $("#expectedDeliveryDate").val(record.expectedDeliveryDate);
-            }
-
-            function saveRecNo2ls(jsonObj) {
-                var lvdata = JSON.parse(jsonObj.data);
-                localStorage.setItem("recno", lvdata.rec_no);
-            }
-        </script>
-    </body>
-</html>
